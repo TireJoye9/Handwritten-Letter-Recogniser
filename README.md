@@ -111,7 +111,3 @@ NeuralNetwork/
 ## Stack
 
 Python, TensorFlow, Keras, TensorFlow Datasets, OpenCV, NumPy, Matplotlib.
-
-## License
-
-MIT
