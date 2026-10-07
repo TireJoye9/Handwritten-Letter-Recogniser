@@ -7,9 +7,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import tensorflow_datasets as tfds
-from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+#from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
-
+""""
 # load emnist letters
 (ds_train, ds_test), ds_info = tfds.load(
     'emnist/letters',
@@ -78,8 +78,22 @@ history = model.fit(
 )
 
 model.save('handwritten_letters_cnn.keras')
-
+"""
 model = tf.keras.models.load_model('best_model.keras')
-loss, accuracy = model.evaluate(ds_test)
-print("Loss:", loss)
-print("Accuracy:", accuracy)
+#loss, accuracy = model.evaluate(ds_test)
+#print("Loss:", loss)
+#print("Accuracy:", accuracy)
+
+image_number = 1
+while os.path.isfile(f"UpperCaseLetters/Letter{image_number}.png"):
+    try:
+        img = cv2.imread(f"UpperCaseLetters/Letter{image_number}.png")[:,:,0]
+        img = np.invert(np.array([img]))
+        prediction = model.predict(img)
+        print(f"This Letter is probably a {chr(int(np.argmax(prediction)) +64)}")
+        plt.imshow(img[0], cmap=plt.cm.binary)
+        plt.show()
+    except:
+        print("Error!")
+    finally:
+        image_number += 1
