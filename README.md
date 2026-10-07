@@ -2,6 +2,9 @@
 
 A convolutional neural network that recognizes handwritten uppercase letters (A–Z). Trained on the EMNIST Letters dataset using TensorFlow and Keras.
 
+## Preview
+<img width="1722" height="686" alt="Screenshot 2026-10-07 012841" src="https://github.com/user-attachments/assets/d91fde07-0903-4728-a905-58cf9e0b0ee8" />
+
 ## What it does
 
 The model takes a 28×28 grayscale image of a handwritten uppercase letter and predicts which letter it is. There are 27 output classes: indices 1–26 map to A–Z, and index 0 is unused.
