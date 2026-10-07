@@ -87,13 +87,26 @@ model = tf.keras.models.load_model('best_model.keras')
 image_number = 1
 while os.path.isfile(f"UpperCaseLetters/Letter{image_number}.png"):
     try:
-        img = cv2.imread(f"UpperCaseLetters/Letter{image_number}.png")[:,:,0]
-        img = np.invert(np.array([img]))
-        prediction = model.predict(img)
-        print(f"This Letter is probably a {chr(int(np.argmax(prediction)) +64)}")
-        plt.imshow(img[0], cmap=plt.cm.binary)
+        #Load as grayscale
+        img = cv2.imread(f"UpperCaseLetters/Letter{image_number}.png", cv2.IMREAD_GRAYSCALE)
+        img = cv2.resize(img, (28, 28))
+        img = np.invert(img)
+        img = img.astype(np.float32) / 255.0
+        #Add batch + channel dims → (1, 28, 28, 1)
+        img = img.reshape(1, 28, 28, 1)
+
+        prediction = model.predict(img, verbose=0)
+        label = int(np.argmax(prediction))
+        letter = chr(label + 64) if label > 0 else "?"
+        confidence = prediction[0][label]
+        print(f"Letter {image_number}: {letter} ({confidence:.1%})")
+
+        #Show what the model actually sees
+        plt.imshow(img[0].reshape(28, 28), cmap=plt.cm.binary)
+        plt.title(f"Predicted: {letter}")
         plt.show()
-    except:
-        print("Error!")
+
+    except Exception as e:
+        print(f"Error on {image_number}: {e}")
     finally:
         image_number += 1
